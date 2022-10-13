@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Bomb_Exploder.iml" filepath="$PROJECT_DIR$/Bomb_Exploder.iml" />
+      <module fileurl="file://$PROJECT_DIR$/BombExploder.iml" filepath="$PROJECT_DIR$/BombExploder.iml" />
     </modules>
   </component>
 </project>
