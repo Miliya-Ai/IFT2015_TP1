@@ -6,7 +6,7 @@ import java.io.FileInputStream;
 public class lireFichier{
     public static void main(String args[]) {
         try{
-            FileInputStream fin = new FileInputStream("src/1.txt");
+            FileInputStream fin = new FileInputStream("src/sample.txt");
             DataInputStream reader = new DataInputStream(fin);
             BufferedReader buffReader = new BufferedReader(new InputStreamReader(reader));
             String strTmp;
