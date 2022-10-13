@@ -4,7 +4,7 @@ import java.io.BufferedReader;
 import java.io.FileInputStream;
 
 public class lireFichier{
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         try{
             FileInputStream fin = new FileInputStream("src/sample.txt");
             DataInputStream reader = new DataInputStream(fin);
