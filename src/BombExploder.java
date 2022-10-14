@@ -1,5 +1,8 @@
+import java.util.List;
+
 public class BombExploder {
     public static void main ( String[] args){
-        System.out.println("hello world");
+        List<String> text = lireFichier.LireFichier("src/sample.txt");
+        System.out.println(text);
     }
 }
