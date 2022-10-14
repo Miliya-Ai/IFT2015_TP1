@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+<<<<<<< HEAD
 public  class lireFichier {
     private final String filename;
 
@@ -17,6 +18,12 @@ public  class lireFichier {
 
         try {
             FileInputStream fin = new FileInputStream(nom);
+=======
+public class lireFichier{
+    public static void main(String[] args) {
+        try{
+            FileInputStream fin = new FileInputStream("src/sample.txt");
+>>>>>>> c57aa6cda394834b4d4dfdbdee006055ed1a0638
             DataInputStream reader = new DataInputStream(fin);
             BufferedReader buffReader = new BufferedReader(new InputStreamReader(reader));
             String strTmp;
