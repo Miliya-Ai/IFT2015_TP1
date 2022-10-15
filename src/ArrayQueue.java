@@ -25,17 +25,21 @@ public class ArrayQueue<E> implements Queue<E> {
     }
     // methods
     public int     size() { return( this.size ); }               // return the number of elements in the queue
+
     public boolean isEmpty() { return( this.size == 0 ); }       // return true if the queue is empty, false otherwise
+
     public void    enqueue( E e ) throws IllegalStateException { // insert element e at the end of the queue
         if( this.size == this.data.length ) throw new IllegalStateException( "Full queue" );
         int avail = ( this.f + this.size ) % this.data.length;   // use modulo for circularity
         this.data[avail] = e;
         this.size++;
     }
+
     public E       first() { // return the first element of the queue, null if empty
         if( this.isEmpty() ) return null;
         return this.data[this.f];
     }
+
     public E       dequeue() { // remove and return the first element of the queue, null if empty
         if( isEmpty() ) return null;
         E element = this.data[this.f];
@@ -44,5 +48,31 @@ public class ArrayQueue<E> implements Queue<E> {
         this.size--;
         return element;
     }
+
     public String toString() { return Arrays.toString( this.data ); }
+
+    /**
+     * @return tous les elements qui se trouvent dans le queue
+     * @author Kim
+     *
+     */
+    public String showAllElements() {
+        String allElements = "[ ";
+
+        if ( isEmpty() ){
+            return "Il y a rien dans le queue";
+        } else {
+            for (int i = f; i < size; i++) {
+                allElements += this.data[i];
+                if (i < size -1 ){
+                     allElements += ", ";
+                } else{
+                    allElements += " ]";
+                }
+            }
+            return allElements;
+        }
+
+    }
+
 }
