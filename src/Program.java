@@ -230,7 +230,7 @@ public class Program {
         } catch(NumberFormatException e) {
             System.out.println("Not a number");
         }
-        return i;
+        return -1;
     }
 
     public void out(String message, LinkedQueue matrice){
