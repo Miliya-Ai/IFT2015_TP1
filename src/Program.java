@@ -78,17 +78,17 @@ public class Program {
         return isDone;
     }
     public boolean contientBombeInactive(LinkedQueue matrice) {
-
+        contientBombeInactive = false;
         for (int i = 0; i < matrice.size(); i++) {
             look = (String) matrice.dequeue();
             if (look.equals(bombeInactive)) {
                 matrice.enqueue(look);
-                return contientBombeInactive = true;
+                contientBombeInactive = true;
             } else{
                 matrice.enqueue(look);
             }
         }
-        return contientBombeInactive = false;
+        return contientBombeInactive;
     }
     //---------------------- Boucle --------------------------- //
 
@@ -120,14 +120,14 @@ public class Program {
      * et finalement, "_2_" ---> "*2*"
      *
      * @param matrice
-     * @see bombesAdjacentes
-     * @see incrementerBombesAdjacentes
+     * @see #bombesAdjacentes(int)
+     * @see #incrementerBombesAdjacentes(LinkedQueue)
      */
     public void activeBombeInactive(LinkedQueue matrice){
 
         for (int i = 0; i < matrice.size(); i++) {
             look = (String) matrice.dequeue();
-            if (look.equals(bombeActiveExplose)) {
+            if (look.equals(bombeActiveExplose)) { 
                 bombesAdjacentes(i);    //verifie les bombes adjacentes a chaque fois qu'on voit "_2_"
                 look = bombeDejaExplose;    //"_2_" ---> "*2*"
                 //matriceCopie.set(i, bombeDejaExplose);
