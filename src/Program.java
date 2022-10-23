@@ -44,7 +44,7 @@ public class Program {
 
     }
 
-    public void algoBegin(LinkedQueue matrice){
+    public void algoBegin(ArrayQueue matrice){
         while (!isDone(matrice)) {  //continuer a chercher tous les bombes
             initialiserBombes(matrice);
             activeBombeInactive(matrice);
@@ -61,34 +61,34 @@ public class Program {
         return false;
     }
     //pour la meme grille
-    public Boolean isDone(LinkedQueue matrice){
+    public Boolean isDone(ArrayQueue matrice){
         Boolean isDone = true;
         for (int i = 0; i < nbrElementsMatrice; i ++){
             look = (String) matrice.dequeue();
             if (look.equals(bombeActive)||look.equals(bombeActiveExplose)){
                 matrice.enqueue(look);
                 isDone = false; //si on retourne tout de suite ici, le f du ArrayQueue != 0
-                contientBombeInactive(matrice);
             } else {
                 matrice.enqueue(look);
             }
         }
+        contientBombeInactive(matrice);
         bombesAdjacentes.clear();
 
         return isDone;
     }
-    public boolean contientBombeInactive(LinkedQueue matrice) {
-
+    public boolean contientBombeInactive(ArrayQueue matrice) {
+        contientBombeInactive = false;
         for (int i = 0; i < matrice.size(); i++) {
             look = (String) matrice.dequeue();
             if (look.equals(bombeInactive)) {
                 matrice.enqueue(look);
-                return contientBombeInactive = true;
+                contientBombeInactive = true;
             } else{
                 matrice.enqueue(look);
             }
         }
-        return contientBombeInactive = false;
+        return contientBombeInactive;
     }
     //---------------------- Boucle --------------------------- //
 
@@ -98,7 +98,7 @@ public class Program {
      * @param matrice
      *
      */
-    public void initialiserBombes(LinkedQueue matrice) {
+    public void initialiserBombes(ArrayQueue matrice) {
 
         for (int i = 0; i < matrice.size(); i++) {
             look = (String) matrice.dequeue();
@@ -120,10 +120,10 @@ public class Program {
      * et finalement, "_2_" ---> "*2*"
      *
      * @param matrice
-     * @see bombesAdjacentes
-     * @see incrementerBombesAdjacentes
+     * @see #bombesAdjacentes(int)
+     * @see #incrementerBombesAdjacentes(ArrayQueue)
      */
-    public void activeBombeInactive(LinkedQueue matrice){
+    public void activeBombeInactive(ArrayQueue matrice){
 
         for (int i = 0; i < matrice.size(); i++) {
             look = (String) matrice.dequeue();
@@ -142,7 +142,7 @@ public class Program {
 
     // TODO: 2022-10-22  Trouver meilleur facon de incrementer seulement les positions adjacentes = 1
     // Logique du code ici ne fonctionne pas: arrive pas a trouver les bonnes positions
-    public void incrementerBombesAdjacentes(LinkedQueue matrice) {
+    public void incrementerBombesAdjacentes(ArrayQueue matrice) {
             int j = 0;
             int index2increment;
             for (int i = 0; i < nbrElementsMatrice; i++){
@@ -188,13 +188,14 @@ public class Program {
 
     // ------------------------ creation de la matrice queue et l'imprimer sur la console -------------------------//
 
-    public LinkedQueue arrayList2queue(){
+    public ArrayQueue arrayList2queue(){
         findMatriceSize();
         nbrElementsMatrice = longueurMatrice * largeurMatrice;
 
         int indexPremierElement = 0;
         int indexDernierElement = nbrElementsMatrice;
-        LinkedQueue matrice = new LinkedQueue();
+        ArrayQueue matrice = new ArrayQueue(nbrElementsMatrice);
+        //LinkedQueue matrice = new LinkedQueue();
 
 
         for (int i = indexPremierElement; i < indexDernierElement; i++) {
@@ -233,7 +234,7 @@ public class Program {
         return -1;
     }
 
-    public void out(String message, LinkedQueue matrice){
+    public void out(String message, ArrayQueue matrice){
         System.out.print(message + " : ");
         System.out.println(matrice.showAllElements());
     }
