@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Objects;
 
 public class Program {
@@ -45,10 +46,12 @@ public class Program {
     }
 
     public void algoBegin(ArrayQueue matrice){
-        while (!isDone(matrice)) {  //continuer a chercher tous les bombes
             initialiserBombes(matrice);
+        while (!isDone(matrice)) {  //continuer a chercher tous les bombes
+
             activeBombeInactive(matrice);
             iteration++;
+
         }
 
     }
@@ -111,7 +114,7 @@ public class Program {
             }
         }
 
-        out("Dans initialiserBombes", matrice);
+        //out("Dans initialiserBombes", matrice);
 
     }
 
@@ -137,25 +140,44 @@ public class Program {
             }
         }
         incrementerBombesAdjacentes(matrice); //incrementer 1 à 2
-        out("Dans activeBombeInactive", matrice);
+        //out("Dans activeBombeInactive", matrice);
     }
 
     // TODO: 2022-10-22  Trouver meilleur facon de incrementer seulement les positions adjacentes = 1
     // Logique du code ici ne fonctionne pas: arrive pas a trouver les bonnes positions
     public void incrementerBombesAdjacentes(ArrayQueue matrice) {
-            int j = 0;
-            int index2increment;
-            for (int i = 0; i < nbrElementsMatrice; i++){
+        int j = 0;
+        int index2increment;
+        if (bombesAdjacentes.size() != 0){
+            Collections.sort(bombesAdjacentes);
+        }
+
+        for (int i = 0; i < nbrElementsMatrice; i++){
+            look = (String) matrice.dequeue();
+
+            if (!bombesAdjacentes.isEmpty()){
                 index2increment = bombesAdjacentes.get(j);
-                look = (String) matrice.dequeue();
-                if (index2increment == i && look.equals(bombeInactive)){
-                    look = bombeActive;
-                    matrice.enqueue(look);
-                    j++;
+                if (index2increment == i){
+                    bombesAdjacentes.remove(0);
+
+                    if (look.equals(bombeInactive)){
+                        look = bombeActiveExplose;
+                        matrice.enqueue(look);
+                    }
+                    else{
+                        matrice.enqueue(look);
+                    }
                 } else{
                     matrice.enqueue(look);
                 }
+            } else{
+                matrice.enqueue(look);
             }
+
+
+
+        }
+
 
 
     }
