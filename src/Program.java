@@ -145,7 +145,7 @@ public class Program {
     public void incrementerBombesAdjacentes(LinkedQueue matrice) {
             int j = 0;
             int index2increment;
-            for (int i = 0; i < nbrElementsMatrice; i++){
+            for (int i = 0; i < matrice.size(); i++){
                 index2increment = bombesAdjacentes.get(j);
                 look = (String) matrice.dequeue();
                 if (index2increment == i && look.equals(bombeInactive)){
@@ -156,8 +156,6 @@ public class Program {
                     matrice.enqueue(look);
                 }
             }
-
-
     }
 
     public void bombesAdjacentes(int indexBombeActiveExplose){
