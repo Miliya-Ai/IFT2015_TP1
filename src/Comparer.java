@@ -2,10 +2,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
-public class comparer {
-          String look;
+public class Comparer {
+      static ArrayList< Integer > bombeAdeIndex = new ArrayList<>();
+      static ArrayList< Integer > bombeAdeVraiChiffre = new ArrayList<>();
+      String look;
     public static void main ( String[] args) {
-       ArrayList< Integer > bombeAdeIndex = new ArrayList<>();
+
        bombeAdeIndex.add(1);
        bombeAdeIndex.add(3);
        bombeAdeIndex.add(0);
@@ -16,7 +18,6 @@ public class comparer {
 
        // jusqu'a ici, juste construire un Arraylist bombeAdeIndex = [2,2,1,1,1,0,1,1,2]
 
-       ArrayList< Integer > bombeAdeVraiChiffre = new ArrayList<>();
        bombeAdeVraiChiffre.add(2);
        bombeAdeVraiChiffre.add(1);
        bombeAdeVraiChiffre.add(2);
@@ -28,8 +29,8 @@ public class comparer {
        bombeAdeVraiChiffre.add(2);
 
        // bombeAdeVraiChiffre = [2,1,2,1,1,0,1]
-
-        incremental(bombeAdeVraiChiffre);
+        Incremental bombeAdeVraiChiffre = new Incremental();
+        bombeAdeVraiChiffre.incremental(bombeAdeVraiChiffre);
         Collections.sort(bombeAdeIndex, new Comparator< Integer >() {
 
     public int compare(Integer m, Integer n) {
@@ -40,17 +41,19 @@ public class comparer {
             }
           }
          });
-                 System.out.println("en ordre：" + bombeAdeIndex);
+         System.out.println("en ordre：" + bombeAdeIndex);
+         bombeAdeVraiChiffre.incremental(bombeAdeVraiChiffre);
             }
 
     public void remmetre(LinkedQueue matrice) {
        for (int i = 0; i < matrice.size(); i++) {
            look = (String) matrice.dequeue();
-           if (i == bombeAdeIndex[i]) {
-               look = bombeAdeVraiChiffre[i];
+           if (i == bombeAdeIndex.get(i)) {
+               look = String.valueOf(bombeAdeVraiChiffre.get(i));
            }
         }
        matrice.enqueue(look);
+       System.out.println(matrice);
     }
 }
     // matrice = [2,2,1,1,1,0,1,1,2]
