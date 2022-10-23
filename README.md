@@ -1,11 +1,12 @@
 # TP1_IFT2015
 
 1. lire une grille(n'import quelle size)
+2. Initialiser les bombes: 2 -> __ 2__ =>
+> voir *initialiserBombes(LinkedQueue matrice)*
+
 
 boucle:
 
-2. Initialiser les bombes: 2 -> __ 2__ => 
-> voir *initialiserBombes(LinkedQueue matrice)*
 3. touver le __ 2__
 > voir *activeBombeInactive(LinkedQueue matrice)* 
 4. chaque chiffre à côté de bomb

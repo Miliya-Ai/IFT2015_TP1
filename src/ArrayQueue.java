@@ -52,33 +52,4 @@ public class ArrayQueue<E> implements Queue<E> {
     public String toString() { return Arrays.toString( this.data ); }
 
 
-
-
-    /**
-     * @return tous les elements qui se trouvent dans le queue
-     * @author Kim
-     *
-     */
-
-    public String showAllElements() {
-        String allElements = "[ ";
-
-        if ( isEmpty() ){
-            return "Il y a rien dans le queue";
-        } else {
-            for (int i = 0; i < size; i++) {
-                allElements += this.data[i];
-                if (i < size -1 ){
-                     allElements += ", ";
-                } else{
-                    allElements += " ]";
-                }
-            }
-            return allElements;
-        }
-
-    }
-
-
-
 }

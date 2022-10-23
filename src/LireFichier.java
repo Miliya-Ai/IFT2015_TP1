@@ -35,20 +35,11 @@ public class LireFichier {
                 grillesBombes.add(element.toString());
             }
         } catch (FileNotFoundException e) {
-            //e.printStackTrace();
             System.out.println("Veuillez entrer le bon path.");
-            System.exit(0);
+            System.exit(1);
         } catch (IOException e) {
             e.printStackTrace();
         }
-/*
-        for(String nbr:grillesBombes) {
-            System.out.println(nbr);
-        }
-
- */
-
-        //System.out.println((toInt(result.get(1))));
 
     }
 

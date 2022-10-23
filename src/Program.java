@@ -1,6 +1,5 @@
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Objects;
 
 public class Program {
     private int iteration = 0;
@@ -9,7 +8,7 @@ public class Program {
     private String bombeActive = "2";
     private String bombeInactive = "1";
     private String pasBombe = "0";
-    private String bombeActiveExplose = "_2_"; //underline 2 '\u0332' + "2"
+    private String bombeActiveExplose = "_2_";
     private String bombeDejaExplose = "*2*";
 
     private int longueurMatrice = 0;
@@ -17,8 +16,6 @@ public class Program {
     private int nbrElementsMatrice = 0;
 
     ArrayList<Integer> bombesAdjacentes = new ArrayList();
-    ArrayList matriceCopie = new ArrayList();
-
     private LireFichier fichier;
 
     String look;
@@ -28,7 +25,6 @@ public class Program {
 
        this.fichier = new LireFichier(path);
        start();
-
 
     }
 
@@ -42,16 +38,13 @@ public class Program {
                 System.out.println(iteration);
             }
         }
-
     }
 
     public void algoBegin(ArrayQueue matrice){
-            initialiserBombes(matrice);
+        initialiserBombes(matrice);
         while (!isDone(matrice)) {  //continuer a chercher tous les bombes
-
             activeBombeInactive(matrice);
             iteration++;
-
         }
 
     }
@@ -93,7 +86,6 @@ public class Program {
         }
         return contientBombeInactive;
     }
-    //---------------------- Boucle --------------------------- //
 
     /***
      *                      "2" ---> _2_
@@ -107,16 +99,13 @@ public class Program {
             look = (String) matrice.dequeue();
             if (look.equals("2")) {
                 look = bombeActiveExplose;
-                //matriceCopie.set(i, bombeActiveExplose);
                 matrice.enqueue(look);
             } else {
                 matrice.enqueue(look);
             }
         }
-
-        //out("Dans initialiserBombes", matrice);
-
     }
+    //----------------------------------------- Boucle --------------------------------------------------------- //
 
     /**
      * Lorsqu'on rencontre "_2_", on cherche les bombes adjacentes et incremente 1 à 2
@@ -133,20 +122,15 @@ public class Program {
             if (look.equals(bombeActiveExplose)) {
                 bombesAdjacentes(i);    //verifie les bombes adjacentes a chaque fois qu'on voit "_2_"
                 look = bombeDejaExplose;    //"_2_" ---> "*2*"
-                //matriceCopie.set(i, bombeDejaExplose);
                 matrice.enqueue(look);
             } else {
                 matrice.enqueue(look);
             }
         }
         incrementerBombesAdjacentes(matrice); //incrementer 1 à 2
-        //out("Dans activeBombeInactive", matrice);
     }
 
-    // TODO: 2022-10-22  Trouver meilleur facon de incrementer seulement les positions adjacentes = 1
-    // Logique du code ici ne fonctionne pas: arrive pas a trouver les bonnes positions
     public void incrementerBombesAdjacentes(ArrayQueue matrice) {
-        int j = 0;
         int index2increment;
         if (bombesAdjacentes.size() != 0){
             Collections.sort(bombesAdjacentes);
@@ -156,30 +140,25 @@ public class Program {
             look = (String) matrice.dequeue();
 
             if (!bombesAdjacentes.isEmpty()){
-                index2increment = bombesAdjacentes.get(j);
+                index2increment = bombesAdjacentes.get(0);
+
                 if (index2increment == i){
                     bombesAdjacentes.remove(0);
 
                     if (look.equals(bombeInactive)){
                         look = bombeActiveExplose;
                         matrice.enqueue(look);
-                    }
-                    else{
+                    } else{
                         matrice.enqueue(look);
                     }
+
                 } else{
                     matrice.enqueue(look);
                 }
             } else{
                 matrice.enqueue(look);
             }
-
-
-
         }
-
-
-
     }
 
     public void bombesAdjacentes(int indexBombeActiveExplose){
@@ -217,22 +196,12 @@ public class Program {
         int indexPremierElement = 0;
         int indexDernierElement = nbrElementsMatrice;
         ArrayQueue matrice = new ArrayQueue(nbrElementsMatrice);
-        //LinkedQueue matrice = new LinkedQueue();
-
 
         for (int i = indexPremierElement; i < indexDernierElement; i++) {
             matrice.enqueue(fichier.getGrillesBombes().get(0));
-            //matriceCopie.add(fichier.getGrillesBombes().get(0));
             fichier.getGrillesBombes().remove(0);
         }
         return matrice;
-    /*
-        for(String nbr:result) {
-            System.out.println(nbr);
-    }
-
-     */
-        //out("Dans arrayList2queue", matrice);
 
     }
 
@@ -251,14 +220,11 @@ public class Program {
             return i;
 
         } catch(NumberFormatException e) {
-            System.out.println("Not a number");
+            System.out.println("La matrice ne contient pas un nombre ");
+            System.exit(1);
         }
         return -1;
     }
 
-    public void out(String message, ArrayQueue matrice){
-        System.out.print(message + " : ");
-        System.out.println(matrice.showAllElements());
-    }
 
 }
