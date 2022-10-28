@@ -22,3 +22,18 @@ boucle:
 
 7. fini(Si c'est juste '2)
 > voir *isDone()*
+
+-------------
+
+
+
+---
+matrice
+file
+
+while (! file.isEmpty){
+idx = file.dequeue
+matrice.set(idx, bombeExplose)
+}
+
+

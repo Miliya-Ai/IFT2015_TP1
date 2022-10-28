@@ -3,7 +3,8 @@ import java.io.IOException;
 public class BombExploder {
 
     public static void main ( String[] args) throws IOException {
-
+        Tester start = new Tester("src/sample.txt");
+        /*
         try {
             String path = args[0].toString().trim();;
             Program start = new Program(path);
@@ -12,6 +13,7 @@ public class BombExploder {
             //System.out.println("Donnée du fichier original:");
             //Program start = new Program("src/sample.txt");
         }
+            */
 
     }
 
