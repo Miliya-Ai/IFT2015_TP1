@@ -1,19 +1,20 @@
-import java.io.IOException;
-
 public class BombExploder {
+    /**
+     * @author Kim Trinh (20215539)
+     * @author Miliya Ai (20180783)
+     * @param args source du fichier d'entree
+     */
+    public static void main ( String[] args) {
 
-    public static void main ( String[] args) throws IOException {
-        Tester start = new Tester("src/sample.txt");
-        /*
+
         try {
-            String path = args[0].toString().trim();;
-            Program start = new Program(path);
+            String path = args[0].trim();
+            new Program(path);
         } catch (Exception e){
             System.out.println("Veuillez mettre le path du fichier d'entrée");
-            //System.out.println("Donnée du fichier original:");
-            //Program start = new Program("src/sample.txt");
+
         }
-            */
+
 
     }
 

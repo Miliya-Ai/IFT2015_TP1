@@ -1,37 +1,39 @@
 import java.util.ArrayList;
-import java.util.Collections;
 
 public class Program {
     private int iteration = 0;
-    private boolean contientBombeInactive;
+    private boolean contientBombeInactive = false;
 
-    private String bombeActive = "2";
-    private String bombeInactive = "1";
-    private String pasBombe = "0";
-    private String bombeActiveExplose = "_2_";
-    private String bombeDejaExplose = "*2*";
+    private final String bombeActive = "2";
+    private final String bombeInactive = "1";
+    private final String pasBombe = "0";
+    private final String bombeActiveExplose = "_2_";
 
     private int longueurMatrice = 0;
     private int largeurMatrice = 0;
     private int nbrElementsMatrice = 0;
 
-    ArrayList<Integer> bombesAdjacentes = new ArrayList();
-    private LireFichier fichier;
+    private final ArrayQueue<Integer> bombesAdjacentes = new ArrayQueue();
+    private final  LireFichier fichier;
 
-    String look;
+    private String look;
 
     //constructeur
     public Program(String path) {
 
-       this.fichier = new LireFichier(path);
-       start();
+        this.fichier = new LireFichier(path);
+        start();
 
     }
 
     // ------------------------------------------------------------------------------------------------------- //
-    public void start(){
+
+    /**
+     * Print le nombre d'iterations ou -1, s'il reste des bombes inactives
+     */
+    private void start(){
         while (!isDone()) { //on itere sur la prochaine grille dans le fichier
-            algoBegin(arrayList2queue());
+            algoBegin(extraireMatrice());
             if (contientBombeInactive){
                 System.out.println(-1);
             } else {
@@ -40,172 +42,189 @@ public class Program {
         }
     }
 
-    public void algoBegin(ArrayQueue matrice){
+    /**
+     * Compte les iterations
+     * @param matrice matrice extrait de la grillesBombes qui contient tous les matrices du fichier
+     */
+    private void algoBegin(ArrayList<String> matrice){
         initialiserBombes(matrice);
         while (!isDone(matrice)) {  //continuer a chercher tous les bombes
             activeBombeInactive(matrice);
             iteration++;
         }
-
     }
-    //pour le fichier complet
-    public Boolean isDone(){
+
+    /**
+     *
+     * @return true si on a traverse tous les matrices du fichier
+     */
+    private Boolean isDone(){
         if (fichier.getGrillesBombes().isEmpty()) {
             return true;
         }
         iteration = 0;
         return false;
     }
-    //pour la meme grille
-    public Boolean isDone(ArrayQueue matrice){
-        Boolean isDone = true;
+
+    /**
+     *
+     * @param matrice une matrice extrait de fichier
+     * @return true s'il reste plus de bombes a exploser
+     */
+
+    private Boolean isDone(ArrayList<String> matrice){
+
         for (int i = 0; i < nbrElementsMatrice; i ++){
-            look = (String) matrice.dequeue();
-            if (look.equals(bombeActive)||look.equals(bombeActiveExplose)){
-                matrice.enqueue(look);
-                isDone = false; //si on retourne tout de suite ici, le f du ArrayQueue != 0
-            } else {
-                matrice.enqueue(look);
+            look = matrice.get(i);
+            if (look.equals(bombeActiveExplose)){
+                return false; //si on retourne tout de suite ici, le f du ArrayQueue != 0
             }
         }
         contientBombeInactive(matrice);
-        bombesAdjacentes.clear();
-
-        return isDone;
+        return true;
     }
-    public boolean contientBombeInactive(ArrayQueue matrice) {
-        contientBombeInactive = false;
+
+    /**
+     *
+     * @param matrice une matrice extrait de fichier
+     * @return true s'il reste une bombe inactive
+     */
+    private boolean contientBombeInactive(ArrayList<String> matrice) {
+
         for (int i = 0; i < matrice.size(); i++) {
-            look = (String) matrice.dequeue();
+            look = matrice.get(i);
             if (look.equals(bombeInactive)) {
-                matrice.enqueue(look);
-                contientBombeInactive = true;
-            } else{
-                matrice.enqueue(look);
+                return (contientBombeInactive = true);
             }
         }
-        return contientBombeInactive;
+        return (contientBombeInactive = false);
     }
 
     /***
      *                      "2" ---> _2_
      *
-     * @param matrice
+     * Au depart, on tranforme tous les "2" en "_2_"
+     * @param matrice une matrice extrait de fichier
      *
      */
-    public void initialiserBombes(ArrayQueue matrice) {
+    private void initialiserBombes(ArrayList<String> matrice) {
 
-        for (int i = 0; i < matrice.size(); i++) {
-            look = (String) matrice.dequeue();
-            if (look.equals("2")) {
-                look = bombeActiveExplose;
-                matrice.enqueue(look);
-            } else {
-                matrice.enqueue(look);
+        ArrayQueue<Integer> chercher2 = new ArrayQueue();
+        for (int i= 0; i< nbrElementsMatrice; i++){
+            look = matrice.get(i);
+            if (look.equals("2")){
+                chercher2.enqueue(i);
             }
         }
+        changerElementMatrice(matrice, bombeActiveExplose, chercher2 );
     }
     //----------------------------------------- Boucle --------------------------------------------------------- //
 
     /**
      * Lorsqu'on rencontre "_2_", on cherche les bombes adjacentes et incremente 1 à 2
-     * et finalement, "_2_" ---> "*2*"
+     * et finalement, "_2_" ---> "2"
      *
-     * @param matrice
-     * @see #bombesAdjacentes(int)
-     * @see #incrementerBombesAdjacentes(ArrayQueue)
+     * @param matrice une matrice extrait de fichier
+     *
      */
-    public void activeBombeInactive(ArrayQueue matrice){
+    private void activeBombeInactive(ArrayList<String> matrice){
+        ArrayQueue<Integer> chercherBombe = new ArrayQueue<>();
 
         for (int i = 0; i < matrice.size(); i++) {
-            look = (String) matrice.dequeue();
+            look = matrice.get(i);
             if (look.equals(bombeActiveExplose)) {
-                bombesAdjacentes(i);    //verifie les bombes adjacentes a chaque fois qu'on voit "_2_"
-                look = bombeDejaExplose;    //"_2_" ---> "*2*"
-                matrice.enqueue(look);
-            } else {
-                matrice.enqueue(look);
+                chercherBombe.enqueue(i);
+                bombesAdjacentes(i, matrice);    //verifie les bombes adjacentes a chaque fois qu'on voit "_2_"
             }
         }
+
         incrementerBombesAdjacentes(matrice); //incrementer 1 à 2
+        changerElementMatrice(matrice, bombeActive, chercherBombe);
     }
 
-    public void incrementerBombesAdjacentes(ArrayQueue matrice) {
-        int index2increment;
-        if (bombesAdjacentes.size() != 0){
-            Collections.sort(bombesAdjacentes);
-        }
-
-        for (int i = 0; i < nbrElementsMatrice; i++){
-            look = (String) matrice.dequeue();
-
-            if (!bombesAdjacentes.isEmpty()){
-                index2increment = bombesAdjacentes.get(0);
-
-                if (index2increment == i){
-                    bombesAdjacentes.remove(0);
-
-                    if (look.equals(bombeInactive)){
-                        look = bombeActiveExplose;
-                        matrice.enqueue(look);
-                    } else{
-                        matrice.enqueue(look);
-                    }
-
-                } else{
-                    matrice.enqueue(look);
-                }
-            } else{
-                matrice.enqueue(look);
-            }
-        }
+    /**
+     * Tous les "1" adjacents de la bombe qui a explose devient des "_2_"
+     * @param matrice une matrice extrait de fichier
+     */
+    private void incrementerBombesAdjacentes(ArrayList<String> matrice) {
+        changerElementMatrice(matrice, bombeActiveExplose, bombesAdjacentes);
     }
 
-    public void bombesAdjacentes(int indexBombeActiveExplose){
-        // bombesAdjacentes = [haut, gauche, droite, bas]
+    /**
+     * Mettre tous les index des positions adjacentes de "_2_" dans un queue
+     * @param indexBombeActiveExplose index des bombes adjacents de "_2_"
+     * @param matrice une matrice extrait de fichier
+     */
+    private void bombesAdjacentes(int indexBombeActiveExplose, ArrayList<String> matrice){
+
         int haut = indexBombeActiveExplose - largeurMatrice;
         int gauche = indexBombeActiveExplose - 1;
         int droite = indexBombeActiveExplose + 1;
         int bas = indexBombeActiveExplose + largeurMatrice;
 
-        //L'ordre est important
-        addIndexBombeIncrementer(haut);
-        addIndexBombeIncrementer(gauche);
-        addIndexBombeIncrementer(droite);
-        addIndexBombeIncrementer(bas);
+        addIndexBombeIncrementer(haut, matrice );
+        addIndexBombeIncrementer(gauche, matrice );
+        addIndexBombeIncrementer(droite, matrice);
+        addIndexBombeIncrementer(bas, matrice);
 
     }
 
-    public void addIndexBombeIncrementer(int position ){
-        if (position < 0 || position >= nbrElementsMatrice ){
-            ;   //do nothing
-        } else if (bombesAdjacentes.contains(position)){
-            ;   //do nothing
-        } else{
-            bombesAdjacentes.add(position);
+    /**
+     * Si ce n'est pas un 1, on n'ajoute pas la position dans le queue
+     * @param position index des positions adjacentes de "_2_"
+     * @param matrice une matrice extrait de fichier
+     */
+    private void addIndexBombeIncrementer(int position, ArrayList<String> matrice ) {
+
+        if ((position >= 0 && position < nbrElementsMatrice)) {
+            look = matrice.get(position);
+            if (look.equals( "1")) {
+                bombesAdjacentes.enqueue(position);
+            }
         }
 
     }
 
-    // ------------------------ creation de la matrice queue et l'imprimer sur la console -------------------------//
+    // ---------------creation de la matrice arrayList et modifier les elements de la matrice-------------------------//
 
-    public ArrayQueue arrayList2queue(){
+    /**
+     *
+     * @param matrice une matrice extrait de fichier
+     * @param nouveauElement convertir un element a un nouveau element
+     * @param queue contient les index des elements a changer
+     */
+    private void changerElementMatrice(ArrayList<String> matrice, String nouveauElement, ArrayQueue<Integer> queue ){
+        int idx;
+        while (!queue.isEmpty()){
+            idx = queue.dequeue();
+            matrice.set(idx, nouveauElement);
+        }
+    }
+
+    /**
+     *
+     * @return une matrice extrait de fichier
+     */
+    private ArrayList<String> extraireMatrice(){
         findMatriceSize();
         nbrElementsMatrice = longueurMatrice * largeurMatrice;
 
         int indexPremierElement = 0;
         int indexDernierElement = nbrElementsMatrice;
-        ArrayQueue matrice = new ArrayQueue(nbrElementsMatrice);
+        ArrayList<String> matrice = new ArrayList();
 
         for (int i = indexPremierElement; i < indexDernierElement; i++) {
-            matrice.enqueue(fichier.getGrillesBombes().get(0));
+            matrice.add(fichier.getGrillesBombes().get(0));
             fichier.getGrillesBombes().remove(0);
         }
         return matrice;
 
     }
 
-    public void findMatriceSize(){
+    /**
+     * calcule la taille de la matrice a l'aide du la largeur et longeur de la matrice
+     */
+    private void findMatriceSize(){
         longueurMatrice = toInt(fichier.getGrillesBombes().get(0));
         largeurMatrice = toInt(fichier.getGrillesBombes().get(1));
 
@@ -213,7 +232,12 @@ public class Program {
         fichier.getGrillesBombes().remove(0); fichier.getGrillesBombes().remove(0);
     }
 
-    public int toInt(String string){
+    /**
+     *
+     * @param string longeur et largeur de la matrice
+     * @return le string de la longeur et largeur en int
+     */
+    private int toInt(String string){
         int i = 0;
         try {
             i = Integer.parseInt(string);
@@ -225,6 +249,4 @@ public class Program {
         }
         return -1;
     }
-
-
 }
